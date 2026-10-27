@@ -45,7 +45,7 @@ export default function Header({
         </div>
       </div>
 
-      {/* Main Navigation Header - Fixed clean height on mobile without text clipping */}
+      {/* Main Navigation Header - Responsive height and flexible spacing */}
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled
@@ -53,65 +53,65 @@ export default function Header({
             : "bg-[#F8F2EF]/90 backdrop-blur-sm"
         }`}
       >
-        <div className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo - Compact and vertically centered to prevent top clipping */}
-          <a href="#" className="flex flex-col group justify-center py-1">
-            <span className="font-serif text-base sm:text-lg md:text-2xl lg:text-3xl tracking-[0.08em] font-medium text-[#1E252D] group-hover:text-[#4C637C] transition-colors leading-tight">
+        <div className="max-w-7xl mx-auto min-h-[64px] sm:min-h-[72px] lg:min-h-[76px] px-4 sm:px-6 lg:px-8 py-2 sm:py-2.5 flex items-center justify-between gap-3 lg:gap-5 xl:gap-8">
+          {/* Brand Logo - Compact luxury proportions */}
+          <a href="#" className="flex flex-col group justify-center py-1 shrink-0">
+            <span className="font-serif text-base sm:text-lg lg:text-xl xl:text-2xl tracking-[0.06em] font-medium text-[#1E252D] group-hover:text-[#4C637C] transition-colors leading-tight whitespace-nowrap">
               ATELIER SOFA
             </span>
-            <span className="text-[9px] tracking-[0.2em] sm:tracking-[0.35em] uppercase text-[#4C637C]/70 -mt-0.5">
+            <span className="text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.25em] uppercase text-[#4C637C]/70 mt-0.5 whitespace-nowrap">
               MILANO • BẮC ÂU
             </span>
           </a>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden lg:flex items-center space-x-7 text-xs tracking-[0.14em] uppercase font-medium text-[#1E252D]/80">
+          {/* Desktop Nav Links - Refined compact font size and well-proportioned gaps */}
+          <nav className="hidden lg:flex items-center justify-center gap-2.5 xl:gap-5 2xl:gap-6 text-[10px] xl:text-[11px] 2xl:text-xs tracking-[0.05em] xl:tracking-[0.08em] uppercase font-medium text-[#1E252D]/80 shrink-0">
             <a
               href="#customizer"
-              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all whitespace-nowrap"
             >
               Bộ Sưu Tập
             </a>
             <a
               href="#craftsmanship"
-              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all whitespace-nowrap"
             >
               Di Sản Chế Tác
             </a>
             <a
               href="#collection-archive"
-              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all whitespace-nowrap"
             >
               Tuyển Tập Độc Bản
             </a>
             <a
               href="#certifications-reviews"
-              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all whitespace-nowrap"
             >
               Chứng Nhận &amp; Đánh Giá
             </a>
             <a
               href="#dimensions"
-              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all whitespace-nowrap"
             >
               Kích Thước &amp; Phòng
             </a>
             <a
               href="#lien-he"
-              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all whitespace-nowrap"
             >
               Đặt Chế Tác
             </a>
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center space-x-3.5 sm:space-x-4">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               onClick={onOpenConsult}
-              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#4C637C]/25 text-xs font-medium tracking-[0.1em] uppercase text-[#1E252D] hover:bg-[#4C637C] hover:text-[#F8F2EF] hover:border-[#4C637C] transition-all cursor-pointer"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 xl:px-4 py-1.5 xl:py-2 rounded-full border border-[#4C637C]/25 text-[10px] xl:text-[11px] font-medium tracking-[0.06em] uppercase text-[#1E252D] hover:bg-[#4C637C] hover:text-[#F8F2EF] hover:border-[#4C637C] transition-all cursor-pointer whitespace-nowrap"
             >
               <span>Tư Vấn Thiết Kế</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#CEB88E]" />
+              <ArrowUpRight className="w-3 h-3 text-[#CEB88E]" />
             </button>
 
             {/* Cart Trigger Button */}

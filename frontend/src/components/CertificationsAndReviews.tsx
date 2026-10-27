@@ -134,46 +134,46 @@ export default function CertificationsAndReviews() {
               return (
                 <div
                   key={cert.id}
-                  className="group relative bg-[#F0EBE1]/75 hover:bg-[#F0EBE1] backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-[#CEB88E]/30 hover:border-[#9A5B42]/50 transition-all duration-300 hover:shadow-xl hover:shadow-stone-900/5 flex flex-col justify-between min-w-[80vw] sm:min-w-0 snap-center shrink-0 sm:shrink"
+                  className="group relative bg-[#F0EBE1]/75 hover:bg-[#F0EBE1] backdrop-blur-md rounded-2xl p-6 md:p-7 border border-[#CEB88E]/30 hover:border-[#9A5B42]/50 transition-all duration-300 hover:shadow-xl hover:shadow-stone-900/5 flex flex-col justify-between h-full w-[84vw] max-w-[340px] sm:w-auto sm:max-w-none snap-start shrink-0 sm:shrink"
                 >
-                  <div>
-                    {/* Compact Seal Header: Medallion and Title in flex row on mobile */}
-                    <div className="flex items-start justify-between gap-3 mb-3.5 md:mb-5">
-                      <div className="flex items-center gap-3">
-                        {/* Medallion Seal Icon */}
-                        <div className="relative w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#1C1917] via-[#2A2624] to-[#1C1917] border-2 border-[#CEB88E]/60 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300 shrink-0">
-                          <Icon className="w-5 h-5 text-[#CEB88E]" />
-                          {/* Little Gold Sparkle dot */}
-                          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#CEB88E] ring-2 ring-[#F0EBE1]" />
-                        </div>
-
-                        <div>
-                          <h3 className="font-serif text-base sm:text-lg font-semibold text-[#1C1917] group-hover:text-[#9A5B42] transition-colors leading-tight">
-                            {cert.name}
-                          </h3>
-                          <p className="text-[10px] sm:text-[11px] font-medium text-[#CEB88E] tracking-wide uppercase line-clamp-1">
-                            {cert.subtitle}
-                          </p>
-                        </div>
+                  {/* Upper Content Block (flex-1 to push footer to the bottom) */}
+                  <div className="flex-1 flex flex-col">
+                    {/* Hàng 1 (Top Row): Icon con dấu tròn bên trái & Badge địa danh bên phải */}
+                    <div className="flex items-start justify-between mb-5">
+                      {/* Medallion Seal Icon */}
+                      <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-[#1C1917] via-[#2A2624] to-[#1C1917] border-2 border-[#CEB88E]/60 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-300 shrink-0">
+                        <Icon className="w-5 h-5 text-[#CEB88E]" />
+                        {/* Little Gold Sparkle dot */}
+                        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#CEB88E] ring-2 ring-[#F0EBE1]" />
                       </div>
 
-                      {/* Origin Tag */}
-                      <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-[#9A5B42] bg-[#FAF7F2] px-2 py-0.5 rounded-full border border-[#CEB88E]/20 shrink-0">
+                      {/* Origin Badge */}
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-[#9A5B42] bg-[#FAF7F2] px-2.5 py-1 rounded-full border border-[#CEB88E]/20 shrink-0">
                         {cert.origin}
                       </span>
                     </div>
 
-                    {/* Detailed Spec */}
-                    <p className="text-xs text-[#57534E] font-light leading-relaxed mb-4">
+                    {/* Hàng 2 (Title & Subtitle Block - Chiếm trọn 100% chiều rộng thẻ w-full) */}
+                    <div className="w-full">
+                      <h3 className="w-full text-xl font-serif font-semibold text-[#1C1917] leading-snug mb-1.5 group-hover:text-[#9A5B42] transition-colors">
+                        {cert.name}
+                      </h3>
+                      <span className="text-[10px] tracking-[0.12em] uppercase text-[#9A5B42] font-semibold mb-4 block">
+                        {cert.subtitle}
+                      </span>
+                    </div>
+
+                    {/* Đoạn văn mô tả */}
+                    <p className="text-xs text-[#57534E] font-light leading-relaxed mb-5">
                       {cert.description}
                     </p>
                   </div>
 
-                  {/* Certification Code Footer */}
-                  <div className="pt-3 border-t border-[#4C637C]/10 flex items-center justify-between text-[10px] text-[#57534E]/80">
+                  {/* Certification Code Footer (Nằm sát đáy và thẳng hàng ngang tăm tắp) */}
+                  <div className="pt-3.5 border-t border-[#4C637C]/10 flex items-center justify-between text-[10px] text-[#57534E]/80 shrink-0">
                     <span className="font-mono tracking-tight">{cert.code}</span>
                     <span className="text-emerald-700 font-semibold flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                       Hiệu lực 2026
                     </span>
                   </div>
