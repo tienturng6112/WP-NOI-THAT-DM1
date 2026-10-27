@@ -1,0 +1,24 @@
+============================================================
+           THÔNG TIN KẾT NỐI VÀ VẬN HÀNH DỰ ÁN
+============================================================
+
+1. FRONTEND (React / Next.js):
+   - Địa chỉ: http://localhost:3000
+   - Lệnh chạy: Mở thư mục frontend, chạy `npm run dev`
+
+2. BACKEND (WordPress PHP Headless):
+   - Cổng API: http://localhost:8080/graphql
+   - Quản trị: http://localhost:8080/wp-admin
+   - Tài khoản đăng nhập Admin:
+     + Username: admin_iphone18
+     + Mật khẩu: admin123
+   - Quản lý Bento Features:
+     + http://localhost:8080/wp-admin/admin.php?page=bento-features
+
+3. CÁCH KHỞI ĐỘNG NHANH:
+   - Cách 1: Click đúp vào file `start-backend.bat` ngay tại thư mục gốc.
+     (Cửa sổ CMD sẽ chạy và tự động mở sẵn trình duyệt vào trang đăng nhập)
+   - Cách 2: Trong terminal frontend, gõ `npm run backend`
+
+* Lưu ý: Khi cửa sổ CMD màu đen đang mở thì backend đang chạy, bạn chỉ cần giữ cửa sổ đó, không cần bấm lại file .bat nhiều lần.
+============================================================

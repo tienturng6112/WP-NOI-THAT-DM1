@@ -1,16 +1,30 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
-const inter = Inter({
+const playfair = Playfair_Display({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "iPhone 18, iPhone 18 Pro & iPhone 18 Pro Max - Apple (Việt Nam)",
-  description: "Khám phá thế hệ iPhone 18 mới nhất: iPhone 18, iPhone 18 Pro và iPhone 18 Pro Max với chip A20 Pro, khung Titan và camera siêu đỉnh.",
+  title: "Atelier Sofa — Tuyệt Tác Nội Thất Thủ Công Ý & Bắc Âu (Luxury Furniture)",
+  description: "Trưng bày và may đo sofa cao cấp phong cách Italian Modern & Nordic Minimalist. Chất liệu da bò Tuscany tự nhiên và vải Bouclé hữu cơ nhập khẩu.",
+  openGraph: {
+    title: "Atelier Sofa — Tuyệt Tác Nội Thất Thủ Công Ý & Bắc Âu",
+    description: "Bộ sưu tập sofa cao cấp Milano, Nordic Bouclé và Verona Leather.",
+    images: ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1400&q=85"],
+  },
 };
 
 export default function RootLayout({
@@ -19,9 +33,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className="dark bg-[#151516] text-[#f5f5f7]">
-      <body className={`${inter.className} min-h-screen bg-[#151516] text-[#f5f5f7] selection:bg-[#0071e3] selection:text-white`}>
-        {children}
+    <html lang="vi" className={`${playfair.variable} ${plusJakarta.variable}`}>
+      <body className="bg-[#F8F2EF] text-[#1E252D] selection:bg-[#4C637C] selection:text-[#F8F2EF] antialiased">
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

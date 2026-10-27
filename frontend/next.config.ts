@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         hostname: "pngimg.com",
       },
       {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
         protocol: "http",
         hostname: "localhost",
       },

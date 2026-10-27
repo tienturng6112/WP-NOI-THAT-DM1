@@ -1,18 +1,15 @@
 "use client";
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Trash2, ShoppingBag, ShieldCheck, ArrowRight } from "lucide-react";
-import { ProductItem } from "@/lib/graphql";
+import React, { useState } from "react";
+import Image from "next/image";
+import { ProductItem, FabricOption, DimensionOption } from "@/lib/graphql";
+import { X, Trash2, ShieldCheck, Truck, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export interface CartItem {
   id: string;
   product: ProductItem;
-  color: string;
-  storage: string;
-  priceFormatted: string;
-  priceNum: number;
-  image: string;
+  fabric: FabricOption;
+  dimension: DimensionOption;
   quantity: number;
 }
 
@@ -20,163 +17,250 @@ interface CartModalProps {
   isOpen: boolean;
   onClose: () => void;
   items: CartItem[];
+  onUpdateQuantity: (id: string, delta: number) => void;
   onRemoveItem: (id: string) => void;
-  onUpdateQty: (id: string, delta: number) => void;
-  onCheckout: () => void;
+  onClearCart: () => void;
 }
 
 export default function CartModal({
   isOpen,
   onClose,
   items,
+  onUpdateQuantity,
   onRemoveItem,
-  onUpdateQty,
-  onCheckout,
+  onClearCart,
 }: CartModalProps) {
-  const subtotal = items.reduce((acc, item) => acc + item.priceNum * item.quantity, 0);
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    note: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  if (!isOpen) return null;
+
+  const totalAmount = items.reduce(
+    (acc, item) => acc + item.dimension.priceNum * item.quantity,
+    0
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      onClearCart();
+      setSubmitted(false);
+      onClose();
+    }, 3000);
+  };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="w-full max-w-xl bg-[#F8F2EF] h-full shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-300 border-l border-[#4C637C]/15">
+        {/* Drawer Header */}
+        <div className="p-6 border-b border-[#4C637C]/10 flex items-center justify-between bg-[#DEE6EC]/60">
+          <div>
+            <span className="text-[10px] tracking-[0.2em] uppercase font-semibold text-[#4C637C] block">
+              ATELIER BESPOKE SALON
+            </span>
+            <h2 className="font-serif text-2xl text-[#1E252D] font-medium">
+              Giỏ Hàng Chế Tác Riêng ({items.length})
+            </h2>
+          </div>
+          <button
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
-          />
-
-          {/* Drawer Panel */}
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 z-50 w-full max-w-md h-full bg-[#151516] border-l border-white/[0.1] shadow-2xl flex flex-col justify-between text-[#f5f5f7]"
+            aria-label="Đóng giỏ hàng"
+            className="p-2 rounded-full hover:bg-black/5 text-[#1E252D] transition-colors cursor-pointer"
           >
-            {/* Header */}
-            <div className="p-6 border-b border-white/[0.08] flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <ShoppingBag className="w-5 h-5 text-[#0071e3]" />
-                <h2 className="text-lg font-bold">Túi hàng của bạn ({items.length})</h2>
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Drawer Body */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {submitted ? (
+            <div className="py-16 text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-[#DEE6EC] text-[#4C637C] flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8 text-[#4C637C]" />
               </div>
+              <h3 className="font-serif text-2xl text-[#1E252D]">
+                Đặt Chế Tác Thành Công!
+              </h3>
+              <p className="text-xs text-[#5F6872] max-w-sm mx-auto font-light leading-relaxed">
+                Chuyên viên tư vấn cấp cao của Atelier Sofa sẽ liên hệ với quý khách trong vòng 15 phút để đối soát bản vẽ mặt bằng và gửi xác nhận đơn hàng.
+              </p>
+            </div>
+          ) : items.length === 0 ? (
+            <div className="py-20 text-center space-y-4">
+              <div className="w-16 h-16 rounded-full bg-[#DEE6EC] flex items-center justify-center mx-auto text-[#5F6872]">
+                <Truck className="w-8 h-8 text-[#4C637C]" />
+              </div>
+              <h3 className="font-serif text-xl text-[#1E252D]">Giỏ hàng đang trống</h3>
+              <p className="text-xs text-[#5F6872] max-w-xs mx-auto">
+                Hãy lựa chọn mẫu sofa và chất liệu yêu thích để thêm vào danh sách may đo.
+              </p>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center text-neutral-400 hover:text-white transition-colors cursor-pointer"
-                aria-label="Đóng"
+                className="mt-2 px-6 py-2.5 rounded-full bg-[#4C637C] text-[#F8F2EF] text-xs uppercase tracking-wider font-medium hover:bg-[#3A4E63] border border-[#CEB88E]/30 cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                Khám Phá Bộ Sưu Tập
               </button>
             </div>
-
-            {/* Cart Items List */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              {items.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-3 py-16">
-                  <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center text-neutral-500">
-                    <ShoppingBag className="w-8 h-8" />
-                  </div>
-                  <p className="text-base font-semibold text-neutral-300">
-                    Túi hàng của bạn đang trống
-                  </p>
-                  <p className="text-xs text-neutral-500 max-w-xs">
-                    Hãy lựa chọn chiếc iPhone 18 hoàn hảo và trải nghiệm sự đột phá hôm nay.
-                  </p>
-                </div>
-              ) : (
-                items.map((item) => (
+          ) : (
+            <>
+              {/* Items List */}
+              <div className="space-y-4">
+                {items.map((item) => (
                   <div
                     key={item.id}
-                    className="p-4 rounded-2xl bg-[#1c1c1e] border border-white/[0.08] flex items-center space-x-4"
+                    className="p-4 rounded-2xl bg-[#DEE6EC]/50 border border-[#4C637C]/[0.1] flex gap-4"
                   >
-                    <div className="w-16 h-16 rounded-xl bg-white/[0.04] p-1.5 flex items-center justify-center shrink-0">
-                      <img
-                        src={item.image}
-                        alt={item.product.name}
-                        className="max-h-full max-w-full object-contain"
+                    <div className="relative w-24 h-20 rounded-xl overflow-hidden shrink-0 bg-[#E1D7D2]">
+                      <Image
+                        src={item.fabric?.image || item.product.featuredImage}
+                        alt={`${item.product.name} - ${item.fabric.name}`}
+                        fill
+                        sizes="100px"
+                        className="object-cover"
                       />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-semibold truncate text-[#f5f5f7]">
-                        {item.product.name}
-                      </h4>
-                      <p className="text-xs text-neutral-400 mt-0.5">
-                        {item.storage} • {item.color}
-                      </p>
-                      <p className="text-xs font-bold text-[#0071e3] mt-1">
-                        {(item.priceNum * item.quantity).toLocaleString("vi-VN")}₫
-                      </p>
-                    </div>
-
-                    <div className="flex flex-col items-end space-y-2">
-                      <button
-                        onClick={() => onRemoveItem(item.id)}
-                        className="text-neutral-500 hover:text-red-400 transition-colors p-1"
-                        aria-label="Xóa"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-
-                      <div className="flex items-center space-x-2 bg-white/[0.06] rounded-full px-2 py-0.5 text-xs">
+                      <div className="flex justify-between items-start gap-2">
+                        <h4 className="font-serif text-base font-medium text-[#1E252D] truncate">
+                          {item.product.name}
+                        </h4>
                         <button
-                          onClick={() => onUpdateQty(item.id, -1)}
-                          className="hover:text-white px-1 font-bold text-neutral-400"
+                          onClick={() => onRemoveItem(item.id)}
+                          className="text-[#5F6872] hover:text-red-600 transition-colors cursor-pointer"
+                          aria-label="Xóa sản phẩm"
                         >
-                          -
+                          <Trash2 className="w-4 h-4" />
                         </button>
-                        <span className="font-medium text-white">{item.quantity}</span>
-                        <button
-                          onClick={() => onUpdateQty(item.id, 1)}
-                          className="hover:text-white px-1 font-bold text-neutral-400"
-                        >
-                          +
-                        </button>
+                      </div>
+
+                      {/* Chosen Fabric */}
+                      <div className="flex items-center gap-1.5 mt-1 text-[11px] text-[#5F6872]">
+                        <span
+                          className="w-2.5 h-2.5 rounded-full border border-black/20"
+                          style={{ backgroundColor: item.fabric.hex }}
+                        />
+                        <span>{item.fabric.name}</span>
+                      </div>
+
+                      {/* Chosen Dimension */}
+                      <p className="text-[11px] text-[#5F6872] truncate mt-0.5">
+                        {item.dimension.size} ({item.dimension.dimensions})
+                      </p>
+
+                      <div className="flex justify-between items-center mt-3 pt-2 border-t border-[#4C637C]/[0.08]">
+                        {/* Quantity Controls */}
+                        <div className="flex items-center border border-[#4C637C]/20 rounded-lg overflow-hidden bg-[#F8F2EF]">
+                          <button
+                            onClick={() => onUpdateQuantity(item.id, -1)}
+                            className="px-2.5 py-0.5 text-xs text-[#1E252D] hover:bg-black/5"
+                          >
+                            -
+                          </button>
+                          <span className="px-3 text-xs font-semibold text-[#1E252D]">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => onUpdateQuantity(item.id, 1)}
+                            className="px-2.5 py-0.5 text-xs text-[#1E252D] hover:bg-black/5"
+                          >
+                            +
+                          </button>
+                        </div>
+
+                        <span className="font-semibold text-sm text-[#1E252D] font-sans">
+                          {(item.dimension.priceNum * item.quantity).toLocaleString("vi-VN")} ₫
+                        </span>
                       </div>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
 
-            {/* Footer Summary & Checkout */}
-            {items.length > 0 && (
-              <div className="p-6 border-t border-white/[0.08] space-y-4 bg-[#18181a]">
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between text-neutral-400">
-                    <span>Tạm tính</span>
-                    <span>{subtotal.toLocaleString("vi-VN")}₫</span>
+              {/* Consultation / Checkout Form */}
+              <form onSubmit={handleSubmit} className="space-y-4 pt-4 border-t border-[#4C637C]/10">
+                <span className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[#1E252D] block">
+                  Thông Tin Liên Hệ Nhận Báo Giá &amp; Khảo Sát Tận Nhà:
+                </span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Họ và tên quý khách *"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#4C637C]/20 bg-[#F8F2EF] text-xs text-[#1E252D] focus:outline-none focus:border-[#4C637C]"
+                    />
                   </div>
-                  <div className="flex justify-between text-neutral-400">
-                    <span>Vận chuyển tiêu chuẩn</span>
-                    <span className="text-emerald-400 font-medium">Miễn phí</span>
+                  <div>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="Số điện thoại *"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#4C637C]/20 bg-[#F8F2EF] text-xs text-[#1E252D] focus:outline-none focus:border-[#4C637C]"
+                    />
                   </div>
-                  <div className="flex justify-between text-base font-bold text-white pt-2 border-t border-white/[0.08]">
-                    <span>Tổng thanh toán</span>
-                    <span className="text-[#0071e3]">{subtotal.toLocaleString("vi-VN")}₫</span>
-                  </div>
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Địa chỉ giao hàng / Tên dự án (Căn hộ, Biệt thự) *"
+                    value={formData.address}
+                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#4C637C]/20 bg-[#F8F2EF] text-xs text-[#1E252D] focus:outline-none focus:border-[#4C637C]"
+                  />
+                </div>
+
+                <div>
+                  <textarea
+                    rows={2}
+                    placeholder="Yêu cầu riêng (ví dụ: đổi hướng góc L, yêu cầu gửi mẫu vải tận nhà...)"
+                    value={formData.note}
+                    onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#4C637C]/20 bg-[#F8F2EF] text-xs text-[#1E252D] focus:outline-none focus:border-[#4C637C]"
+                  />
                 </div>
 
                 <button
-                  onClick={onCheckout}
-                  className="w-full py-3.5 px-6 font-semibold text-sm text-white bg-[#0071e3] hover:bg-[#0077ed] transition-all duration-200 active:scale-98 flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/30 cursor-pointer"
-                  style={{ borderRadius: "98px" }}
+                  type="submit"
+                  className="w-full py-4 rounded-full bg-[#4C637C] hover:bg-[#3A4E63] text-[#F8F2EF] font-medium text-xs tracking-[0.16em] uppercase transition-all shadow-xl shadow-[#4C637C]/20 border border-[#CEB88E]/30 flex items-center justify-center gap-2 cursor-pointer mt-4"
                 >
-                  <span>Thanh toán với Apple Pay</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Gửi Yêu Cầu Chế Tác &amp; Giữ Chỗ Sản Xuất</span>
+                  <ArrowRight className="w-4 h-4 text-[#CEB88E]" />
                 </button>
+              </form>
+            </>
+          )}
+        </div>
 
-                <div className="flex items-center justify-center space-x-2 text-[11px] text-neutral-400 pt-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-neutral-400" />
-                  <span>Giao dịch an toàn & mã hóa bảo mật 256-bit</span>
-                </div>
-              </div>
-            )}
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+        {/* Drawer Footer with Subtotal */}
+        {items.length > 0 && !submitted && (
+          <div className="p-6 border-t border-[#4C637C]/10 bg-[#DEE6EC]/60 space-y-3">
+            <div className="flex justify-between items-center text-xs text-[#5F6872]">
+              <span>Tạm tính ({items.length} món):</span>
+              <span className="font-semibold text-base text-[#1E252D] font-sans">
+                {totalAmount.toLocaleString("vi-VN")} ₫
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] text-[#4C637C]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#CEB88E]" />
+              <span>Đã gồm VAT, miễn phí vận chuyển &amp; lắp đặt tận phòng toàn quốc.</span>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

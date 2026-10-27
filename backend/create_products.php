@@ -1,6 +1,6 @@
 <?php
 /**
- * Setup Script for iPhone 18 WooCommerce Products
+ * Setup Script for Atelier Sofa Luxury Furniture (WooCommerce)
  */
 require_once __DIR__ . '/wp-load.php';
 
@@ -13,12 +13,12 @@ require_once ABSPATH . 'wp-admin/includes/image.php';
 require_once ABSPATH . 'wp-admin/includes/file.php';
 require_once ABSPATH . 'wp-admin/includes/media.php';
 
-echo "=== Setting up WooCommerce Apple Store ===\n";
+echo "=== Setting up Atelier Sofa Luxury Furniture Store ===\n";
 
 // Function to download image via PHP cURL and create WP attachment
 function upload_image_from_url($url, $title) {
     $upload_dir = wp_upload_dir();
-    $filename = basename(parse_url($url, PHP_URL_PATH));
+    $filename = 'sofa_' . md5($url) . '.jpg';
     $file_path = $upload_dir['path'] . '/' . $filename;
     $file_url = $upload_dir['url'] . '/' . $filename;
 
@@ -29,6 +29,7 @@ function upload_image_from_url($url, $title) {
     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     $data = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
@@ -42,7 +43,7 @@ function upload_image_from_url($url, $title) {
 
     $filetype = wp_check_filetype($filename, null);
     $attachment = array(
-        'post_mime_type' => $filetype['type'] ?: 'image/png',
+        'post_mime_type' => $filetype['type'] ?: 'image/jpeg',
         'post_title'     => sanitize_text_field($title),
         'post_content'   => '',
         'post_status'    => 'inherit',
@@ -60,11 +61,11 @@ function upload_image_from_url($url, $title) {
     return 0;
 }
 
-// 1. Download and create attachments
+// 1. Image URLs
 $image_urls = [
-    'img1' => 'https://pngimg.com/d/iphone_14_PNG2.png',
-    'img2' => 'https://pngimg.com/d/iphone_14_PNG21.png',
-    'img3' => 'https://pngimg.com/d/iphone_13_PNG28.png',
+    'sofa1' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1400&q=85',
+    'sofa2' => 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1400&q=85',
+    'sofa3' => 'https://images.unsplash.com/photo-1540574163026-643ea20ade25?auto=format&fit=crop&w=1400&q=85',
 ];
 
 $attach_ids = [];
@@ -84,7 +85,7 @@ foreach ($image_urls as $key => $url) {
         $attach_ids[$key] = $existing[0]->ID;
         echo "Using existing attachment ID {$attach_ids[$key]} for {$key}\n";
     } else {
-        $id = upload_image_from_url($url, "iPhone Asset " . strtoupper($key));
+        $id = upload_image_from_url($url, "Atelier Sofa " . strtoupper($key));
         if ($id) {
             update_post_meta($id, '_source_url', $url);
             $attach_ids[$key] = $id;
@@ -92,83 +93,68 @@ foreach ($image_urls as $key => $url) {
     }
 }
 
-// 2. Product definitions
+// 2. Sofa definitions
 $products_data = [
     [
-        'name' => 'iPhone 18',
-        'slug' => 'iphone-18',
-        'price_min' => 28990000,
-        'price_max' => 34990000,
-        'regular_price' => 28990000,
-        'featured_img' => $attach_ids['img1'] ?? 0,
-        'featured_url' => $image_urls['img1'],
-        'gallery_imgs' => array_filter([$attach_ids['img2'] ?? 0, $attach_ids['img3'] ?? 0]),
-        'gallery_urls' => [$image_urls['img2'], $image_urls['img3']],
-        'description' => 'iPhone 18 được trang bị chip A20 Bionic đỉnh cao, màn hình Super Retina XDR với tần số quét ProMotion 120Hz mượt mà. Hệ thống camera kép 48MP bắt trọn mọi khoảnh khắc với công nghệ Photonic Engine thế hệ mới.',
-        'short_description' => 'Mạnh mẽ vượt trội. Thiết kế nhôm hàng không vũ trụ cùng mặt kính Ceramic Shield bền bỉ bậc nhất.',
+        'name' => 'Milano Modular Sofa',
+        'slug' => 'milano-modular-sofa',
+        'price_min' => 89000000,
+        'price_max' => 145000000,
+        'regular_price' => 89000000,
+        'featured_img' => $attach_ids['sofa1'] ?? 0,
+        'featured_url' => $image_urls['sofa1'],
+        'gallery_imgs' => array_filter([$attach_ids['sofa2'] ?? 0, $attach_ids['sofa3'] ?? 0]),
+        'gallery_urls' => [$image_urls['sofa2'], $image_urls['sofa3']],
+        'description' => 'Milano Modular Sofa là hiện thân của phong cách Italian Minimalist sang trọng. Cấu trúc mô-đun tự do, khung gỗ Sồi Mỹ nguyên khối và lớp đệm lông vũ tỷ lệ vàng.',
+        'short_description' => 'Kiến trúc mô-đun Ý. Sự giao thoa giữa điêu khắc và tiện nghi sống đỉnh cao.',
         'variations' => [
-            ['storage' => '256GB', 'color' => 'Titan Tự Nhiên', 'price' => 28990000],
-            ['storage' => '256GB', 'color' => 'Titan Sa Mạc', 'price' => 28990000],
-            ['storage' => '256GB', 'color' => 'Đen Nhám', 'price' => 28990000],
-            ['storage' => '512GB', 'color' => 'Titan Tự Nhiên', 'price' => 31990000],
-            ['storage' => '512GB', 'color' => 'Titan Sa Mạc', 'price' => 31990000],
-            ['storage' => '512GB', 'color' => 'Đen Nhám', 'price' => 31990000],
-            ['storage' => '1TB',   'color' => 'Titan Tự Nhiên', 'price' => 34990000],
-            ['storage' => '1TB',   'color' => 'Titan Sa Mạc', 'price' => 34990000],
-            ['storage' => '1TB',   'color' => 'Đen Nhám', 'price' => 34990000],
+            ['size' => '2.4m - 3 Chỗ ngồi', 'fabric' => 'Bouclé Kem Tuyết', 'price' => 89000000],
+            ['size' => '2.4m - 3 Chỗ ngồi', 'fabric' => 'Da Semi-Aniline Cognac', 'price' => 98000000],
+            ['size' => '3.2m - Góc Chữ L', 'fabric' => 'Bouclé Kem Tuyết', 'price' => 118000000],
+            ['size' => '3.2m - Góc Chữ L', 'fabric' => 'Da Semi-Aniline Cognac', 'price' => 128000000],
+            ['size' => '3.8m - Grand Sectional', 'fabric' => 'Bouclé Kem Tuyết', 'price' => 145000000],
+            ['size' => '3.8m - Grand Sectional', 'fabric' => 'Da Semi-Aniline Cognac', 'price' => 158000000],
         ]
     ],
     [
-        'name' => 'iPhone 18 Pro',
-        'slug' => 'iphone-18-pro',
-        'price_min' => 34990000,
-        'price_max' => 42990000,
-        'regular_price' => 34990000,
-        'featured_img' => $attach_ids['img2'] ?? 0,
-        'featured_url' => $image_urls['img2'],
-        'gallery_imgs' => array_filter([$attach_ids['img1'] ?? 0, $attach_ids['img3'] ?? 0]),
-        'gallery_urls' => [$image_urls['img1'], $image_urls['img3']],
-        'description' => 'iPhone 18 Pro - Chuẩn mực Pro đích thực với khung viền Titan Cấp 5 siêu nhẹ và bền bỉ. Sức mạnh đột phá từ chip A20 Pro với GPU 6 lõi và phần cứng Ray Tracing, camera Telephoto 5x thế hệ mới.',
-        'short_description' => 'Khung Titan chuẩn hàng không vũ trụ. Chip A20 Pro mang lại hiệu năng đồ họa đỉnh cao.',
+        'name' => 'Nordic Bouclé Lounge Sofa',
+        'slug' => 'nordic-boucle-lounge-sofa',
+        'price_min' => 64500000,
+        'price_max' => 108000000,
+        'regular_price' => 64500000,
+        'featured_img' => $attach_ids['sofa2'] ?? 0,
+        'featured_url' => $image_urls['sofa2'],
+        'gallery_imgs' => array_filter([$attach_ids['sofa1'] ?? 0, $attach_ids['sofa3'] ?? 0]),
+        'gallery_urls' => [$image_urls['sofa1'], $image_urls['sofa3']],
+        'description' => 'Nordic Bouclé Lounge sở hữu đường cong uốn lượn liên tục không góc cạnh. Bề mặt bọc lớp vải Bouclé len cừu bồng bềnh mang lại xúc giác êm ái tuyệt đối.',
+        'short_description' => 'Đường nét hữu cơ Scandinavia mềm mại, bọc vải Bouclé len cừu tự nhiên ấm cúng.',
         'variations' => [
-            ['storage' => '256GB', 'color' => 'Titan Tự Nhiên', 'price' => 34990000],
-            ['storage' => '256GB', 'color' => 'Titan Sa Mạc', 'price' => 34990000],
-            ['storage' => '256GB', 'color' => 'Đen Nhám', 'price' => 34990000],
-            ['storage' => '512GB', 'color' => 'Titan Tự Nhiên', 'price' => 38990000],
-            ['storage' => '512GB', 'color' => 'Titan Sa Mạc', 'price' => 38990000],
-            ['storage' => '512GB', 'color' => 'Đen Nhám', 'price' => 38990000],
-            ['storage' => '1TB',   'color' => 'Titan Tự Nhiên', 'price' => 42990000],
-            ['storage' => '1TB',   'color' => 'Titan Sa Mạc', 'price' => 42990000],
-            ['storage' => '1TB',   'color' => 'Đen Nhám', 'price' => 42990000],
+            ['size' => '2.2m - Dáng Cong Nhẹ', 'fabric' => 'Bouclé Kem Yến Mạch', 'price' => 64500000],
+            ['size' => '2.8m - Dáng Cong Điêu Khắc', 'fabric' => 'Bouclé Kem Yến Mạch', 'price' => 86000000],
+            ['size' => '3.4m - Tổ Hợp Vòng Cung', 'fabric' => 'Bouclé Kem Yến Mạch', 'price' => 108000000],
         ]
     ],
     [
-        'name' => 'iPhone 18 Pro Max',
-        'slug' => 'iphone-18-pro-max',
-        'price_min' => 39990000,
-        'price_max' => 46990000,
-        'regular_price' => 39990000,
-        'featured_img' => $attach_ids['img3'] ?? 0,
-        'featured_url' => $image_urls['img3'],
-        'gallery_imgs' => array_filter([$attach_ids['img1'] ?? 0, $attach_ids['img2'] ?? 0]),
-        'gallery_urls' => [$image_urls['img1'], $image_urls['img2']],
-        'description' => 'iPhone 18 Pro Max - Đỉnh cao công nghệ Apple. Màn hình lớn 6.9 inch Super Retina XDR viền mỏng nhất từng có. Thời lượng pin dài nhất từ trước đến nay cùng nút Điều Khiển Camera (Camera Control) cảm ứng haptic thế hệ mới.',
-        'short_description' => 'Màn hình 6.9 inch siêu đỉnh, thời lượng pin cả ngày dài và camera Pro tối thượng.',
+        'name' => 'Verona Cognac Leather Sofa',
+        'slug' => 'verona-cognac-leather-sofa',
+        'price_min' => 115000000,
+        'price_max' => 198000000,
+        'regular_price' => 115000000,
+        'featured_img' => $attach_ids['sofa3'] ?? 0,
+        'featured_url' => $image_urls['sofa3'],
+        'gallery_imgs' => array_filter([$attach_ids['sofa1'] ?? 0, $attach_ids['sofa2'] ?? 0]),
+        'gallery_urls' => [$image_urls['sofa1'], $image_urls['sofa2']],
+        'description' => 'Verona là kiệt tác chế tác từ các nghệ nhân vùng Florence. Từng mét da bò Full-Grain được tuyển chọn khắt khe, thuộc thảo mộc tự nhiên tại vùng Tuscany.',
+        'short_description' => 'Da bò Ý Full-Grain nguyên tấm thuộc thảo mộc, chân kim loại đồng thau xước mờ.',
         'variations' => [
-            ['storage' => '256GB', 'color' => 'Titan Tự Nhiên', 'price' => 39990000],
-            ['storage' => '256GB', 'color' => 'Titan Sa Mạc', 'price' => 39990000],
-            ['storage' => '256GB', 'color' => 'Đen Nhám', 'price' => 39990000],
-            ['storage' => '512GB', 'color' => 'Titan Tự Nhiên', 'price' => 43990000],
-            ['storage' => '512GB', 'color' => 'Titan Sa Mạc', 'price' => 43990000],
-            ['storage' => '512GB', 'color' => 'Đen Nhám', 'price' => 43990000],
-            ['storage' => '1TB',   'color' => 'Titan Tự Nhiên', 'price' => 46990000],
-            ['storage' => '1TB',   'color' => 'Titan Sa Mạc', 'price' => 46990000],
-            ['storage' => '1TB',   'color' => 'Đen Nhám', 'price' => 46990000],
+            ['size' => '2.6m - 3 Chỗ ngồi VIP', 'fabric' => 'Da Bò Cognac Tuscany', 'price' => 115000000],
+            ['size' => '3.3m - Góc L Da Bò', 'fabric' => 'Da Bò Cognac Tuscany', 'price' => 158000000],
+            ['size' => '4.0m - Bộ Tổng Thống', 'fabric' => 'Da Bò Cognac Tuscany', 'price' => 198000000],
         ]
     ],
 ];
 
-// Clean existing iPhone products if needed
+// Clean old products if any
 foreach ($products_data as $p) {
     $existing = get_page_by_path($p['slug'], OBJECT, 'product');
     if ($existing) {
@@ -179,7 +165,7 @@ foreach ($products_data as $p) {
 
 // 3. Create products with attributes and variations
 foreach ($products_data as $p_info) {
-    echo "Creating Variable Product: {$p_info['name']}...\n";
+    echo "Creating Variable Sofa: {$p_info['name']}...\n";
 
     $product = new WC_Product_Variable();
     $product->set_name($p_info['name']);
@@ -191,7 +177,6 @@ foreach ($products_data as $p_info) {
     $product->set_manage_stock(false);
     $product->set_stock_status('instock');
 
-    // Attachments
     if (!empty($p_info['featured_img'])) {
         $product->set_image_id($p_info['featured_img']);
     }
@@ -199,52 +184,13 @@ foreach ($products_data as $p_info) {
         $product->set_gallery_image_ids($p_info['gallery_imgs']);
     }
 
-    // Set attributes
-    $attr_storage = new WC_Product_Attribute();
-    $attr_storage->set_id(0);
-    $attr_storage->set_name('Dung lượng');
-    $attr_storage->set_options(['256GB', '512GB', '1TB']);
-    $attr_storage->set_position(0);
-    $attr_storage->set_visible(true);
-    $attr_storage->set_variation(true);
-
-    $attr_color = new WC_Product_Attribute();
-    $attr_color->set_id(0);
-    $attr_color->set_name('Màu sắc');
-    $attr_color->set_options(['Titan Tự Nhiên', 'Titan Sa Mạc', 'Đen Nhám']);
-    $attr_color->set_position(1);
-    $attr_color->set_visible(true);
-    $attr_color->set_variation(true);
-
-    $product->set_attributes([$attr_storage, $attr_color]);
     $product_id = $product->save();
-
     echo "Saved Product ID: {$product_id}\n";
 
-    // Set direct URL metadata for external references
     update_post_meta($product_id, '_direct_featured_url', $p_info['featured_url']);
     update_post_meta($product_id, '_direct_gallery_urls', $p_info['gallery_urls']);
 
-    // Create variations
-    foreach ($p_info['variations'] as $v) {
-        $variation = new WC_Product_Variation();
-        $variation->set_parent_id($product_id);
-        $variation->set_status('publish');
-        $variation->set_regular_price($v['price']);
-        $variation->set_price($v['price']);
-        $variation->set_attributes([
-            'dung-luong' => $v['storage'],
-            'mau-sac'    => $v['color']
-        ]);
-        $variation->set_manage_stock(false);
-        $variation->set_stock_status('instock');
-        $var_id = $variation->save();
-        echo "  - Added Variation ID {$var_id}: {$v['storage']} / {$v['color']} -> " . number_format($v['price']) . "đ\n";
-    }
-
-    // Sync variable product prices
-    WC_Product_Variable::sync($product_id);
     echo "Completed {$p_info['name']}!\n\n";
 }
 
-echo "=== All Products Successfully Created! ===\n";
+echo "=== All Atelier Sofas Successfully Created! ===\n";

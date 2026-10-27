@@ -10,7 +10,7 @@ add_action('init', function () {
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     header("Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With, Origin, Accept");
 
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         status_header(200);
         exit();
     }
@@ -27,51 +27,51 @@ add_filter('graphql_response_headers_to_send', function ($headers) {
 // Helper for default Bento data
 function get_default_bento_data() {
     return [
-        'super_title' => 'ĐỈNH CAO CÔNG NGHỆ',
-        'heading'     => 'Tìm hiểu những điểm chạm vượt bậc.',
-        'description' => 'Mỗi chi tiết trên dòng iPhone 18 đều được thiết kế tỉ mỉ để mang đến trải nghiệm đột phá chưa từng có.',
+        'super_title' => 'TIÊU CHUẨN NỘI THẤT XA XỈ',
+        'heading'     => 'Bí quyết kiến tạo những tác phẩm trường tồn.',
+        'description' => 'Từ kỹ thuật ghép mộng mộc truyền thống Bắc Ý đến lớp lông vũ tinh tuyển, mỗi chi tiết trên từng bộ sofa đều được trau chuốt chuẩn xác theo tiêu chuẩn nội thất xa xỉ châu Âu.',
         'features'    => [
             [
-                'tag'         => 'Hiệu Năng Vô Song',
-                'title'       => 'Chip A20 Pro Bionic',
-                'description' => 'Kiến trúc 3nm thế hệ thứ ba hoàn toàn mới. Nhanh hơn 35% và tiết kiệm năng lượng 40% so với thế hệ trước.',
-                'icon'        => 'cpu',
-                'gradient'    => 'blue'
-            ],
-            [
-                'tag'         => 'Nhiếp Ảnh Điện Toán',
-                'title'       => 'Camera 48MP Fusion Pro',
-                'description' => 'Ống kính Telephoto 5x và cảm biến Quad-Pixel thế hệ 3 bắt trọn mọi chi tiết trong điều kiện ánh sáng yếu.',
-                'icon'        => 'camera',
+                'tag'         => 'Vật Liệu Khung Xương',
+                'title'       => 'Khung Gỗ Sồi Nga Sấy Chân Không',
+                'description' => 'Gỗ tự nhiên nguyên khối sấy chân không 6 tháng đạt độ ẩm lý tưởng dưới 9%, chịu tải trọng tĩnh 750kg và bảo hành kết cấu 10 năm.',
+                'icon'        => 'tree-pine',
                 'gradient'    => 'amber'
             ],
             [
-                'tag'         => 'Vật Liệu Đỉnh Cao',
-                'title'       => 'Khung Titan Cấp 5',
-                'description' => 'Hợp kim Titan dùng trong ngành hàng không vũ trụ, mang lại tỷ lệ độ bền trên trọng lượng cao nhất từng có trên iPhone.',
-                'icon'        => 'shield',
+                'tag'         => 'Độ Êm Tuyệt Đối',
+                'title'       => 'Lông Vũ Tự Nhiên & Foam HR45',
+                'description' => 'Cấu trúc đệm phân 3 tầng: áo ngoài nhồi lông vũ ngỗng 70% êm ái như mây, lõi Memory Foam tỷ trọng cao 45kg/m³ đàn hồi vĩnh cửu.',
+                'icon'        => 'feather',
                 'gradient'    => 'neutral'
             ],
             [
-                'tag'         => 'Trí Tuệ Nhân Tạo',
-                'title'       => 'Apple Intelligence',
-                'description' => 'Hệ thống trí tuệ cá nhân hóa sâu sắc, tích hợp trực tiếp trên thiết bị bảo vệ tối đa quyền riêng tư của bạn.',
+                'tag'         => 'Di Sản Da Thuộc',
+                'title'       => 'Da Bò Ý Full-Grain Tuscany',
+                'description' => 'Thuộc thảo mộc tự nhiên tại Florence, Ý. Bề mặt giữ trọn vân da nguyên bản, càng sử dụng theo năm tháng bề mặt càng bóng bẩy, lên nước tuyệt đẹp.',
+                'icon'        => 'shield-check',
+                'gradient'    => 'terracotta'
+            ],
+            [
+                'tag'         => 'Công Nghệ Bề Mặt',
+                'title'       => 'Vải Bouclé Kháng Nước Nano',
+                'description' => 'Sợi Bouclé len cừu tự nhiên phủ lớp bảo vệ Lotus Effect, ngăn chất lỏng thẩm thấu, dễ dàng lau sạch vết cà phê hay rượu vang tức thì.',
                 'icon'        => 'sparkles',
-                'gradient'    => 'pink'
+                'gradient'    => 'olive'
             ],
             [
-                'tag'         => 'Năng Lượng Bền Bỉ',
-                'title'       => 'Thời Lượng Pin 33 Giờ',
-                'description' => 'Tận hưởng cả ngày dài sử dụng thoải mái với công nghệ pin xếp chồng tiên tiến và sạc nhanh MagSafe 35W.',
-                'icon'        => 'battery-charging',
-                'gradient'    => 'emerald'
+                'tag'         => 'Kỹ Thuật Thượng Thừa',
+                'title'       => 'Khâu Tay Saddle Stitching',
+                'description' => 'Từng đường kim mũi chỉ được thực hiện thủ công bởi nghệ nhân có thâm niên trên 20 năm, tạo điểm nhấn đường viền chuẩn xác từng milimet.',
+                'icon'        => 'scissors',
+                'gradient'    => 'amber'
             ],
             [
-                'tag'         => 'Màn Hình Pro',
-                'title'       => 'Super Retina XDR 120Hz',
-                'description' => 'Độ sáng đỉnh 3000 nits ngoài trời, công nghệ ProMotion 1-120Hz mượt mà và màn hình luôn bật Always-On.',
-                'icon'        => 'layers',
-                'gradient'    => 'cyan'
+                'tag'         => 'Cá Nhân Hóa',
+                'title'       => 'May Đo Bespoke Theo Bản Vẽ',
+                'description' => 'Tùy biến chiều dài, góc quay L hoặc đổi chất liệu bọc chuẩn xác theo kích thước phòng khách và bảng màu nội thất của gia chủ.',
+                'icon'        => 'compass',
+                'gradient'    => 'terracotta'
             ],
         ]
     ];

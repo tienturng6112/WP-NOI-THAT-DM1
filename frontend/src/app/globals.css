@@ -1,51 +1,106 @@
 @import "tailwindcss";
 
 :root {
-  --background: #151516;
-  --foreground: #f5f5f7;
-  --apple-blue: #0071e3;
-  --apple-blue-hover: #0077ed;
-  --apple-dark-card: #1c1c1e;
-  --apple-subtext: #86868b;
-  --apple-border: rgba(255, 255, 255, 0.12);
+  --color-taupe: #E1D7D2;
+  --color-birch: #F8F2EF;
+  --color-gold: #CEB88E;
+  --color-gold-hover: #BA9D6B;
+  --color-azure: #4C637C;
+  --color-azure-hover: #3A4E63;
+  --color-sky: #C8D7E1;
+  --color-duck-egg: #DEE6EC;
+
+  --bg-primary: #F8F2EF; /* Birch */
+  --bg-secondary: #E1D7D2; /* Taupe */
+  --bg-surface: #DEE6EC; /* Duck Egg */
+  --text-primary: #1E252D; /* Deep tailored slate */
+  --text-muted: #5F6872;
+  --accent-gold: #CEB88E;
+  --accent-azure: #4C637C;
+  --border-subtle: rgba(76, 99, 124, 0.12);
+  --border-medium: rgba(76, 99, 124, 0.22);
+}
+
+html {
+  scroll-behavior: auto; /* Let Lenis control smooth scrolling */
+  background-color: #F8F2EF;
+  color: #1E252D;
 }
 
 body {
-  background-color: #151516;
-  color: #f5f5f7;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
+  background-color: #F8F2EF;
+  color: #1E252D;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
 }
 
-/* Apple luxury glow and floating effects */
-@keyframes appleFloat {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(0.8deg);
-  }
+/* Serif headings */
+.font-serif {
+  font-family: var(--font-playfair), "Cormorant Garamond", Georgia, serif;
 }
 
-.animate-floating {
-  animation: appleFloat 6s ease-in-out infinite;
+.font-sans {
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
 }
 
-/* Custom scrollbar */
+/* Luxury Scrollbar matching Birch, Taupe & Gold */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #151516;
+  background: #F8F2EF;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333336;
-  border-radius: 4px;
+  background: #CEB88E;
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #444448;
+  background: #4C637C;
 }
+
+/* Text Selection */
+::selection {
+  background-color: #4C637C;
+  color: #F8F2EF;
+}
+
+/* Subtle fabric grain overlay */
+.luxury-grain {
+  background-image: radial-gradient(rgba(76, 99, 124, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Infinite Logistics Marquee */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbar for horizontal swipe carousels on mobile */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

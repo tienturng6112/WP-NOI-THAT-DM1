@@ -1,109 +1,219 @@
 "use client";
 
-import React, { useState } from "react";
-import { ShoppingBag, Search, Menu, X, ArrowUpRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ShoppingBag, Phone, MapPin, Menu, X, Compass, ArrowUpRight } from "lucide-react";
 
 interface HeaderProps {
   cartCount: number;
   onOpenCart: () => void;
+  onOpenConsult: () => void;
 }
 
-export default function Header({ cartCount, onOpenCart }: HeaderProps) {
+export default function Header({
+  cartCount,
+  onOpenCart,
+  onOpenConsult,
+}: HeaderProps) {
+  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = [
-    { name: "Cửa hàng", href: "#" },
-    { name: "Mac", href: "#" },
-    { name: "iPad", href: "#" },
-    { name: "iPhone", href: "#", active: true },
-    { name: "Watch", href: "#" },
-    { name: "AirPods", href: "#" },
-    { name: "TV & Nhà", href: "#" },
-    { name: "Giải trí", href: "#" },
-    { name: "Phụ kiện", href: "#" },
-    { name: "Hỗ trợ", href: "#" },
-  ];
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#151516]/85 border-b border-white/[0.08] transition-all">
-      <div className="max-w-[1024px] mx-auto px-4 h-11 flex items-center justify-between text-xs tracking-tight">
-        {/* Apple Logo */}
-        <a
-          href="#"
-          className="text-[#f5f5f7] hover:opacity-70 transition-opacity flex items-center"
-          aria-label="Apple Home"
-        >
-          <svg
-            className="w-4 h-4 fill-current"
-            viewBox="0 0 170 170"
-            xmlns="http://www.w3.org/2000/svg"
+    <>
+      {/* Top Luxury Announcement Bar */}
+      <div className="bg-[#4C637C] text-[#F8F2EF] text-[10px] sm:text-[11px] font-medium tracking-[0.12em] sm:tracking-[0.18em] uppercase py-1.5 sm:py-2 px-3 sm:px-4 text-center border-b border-white/[0.12]">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <span className="hidden md:inline-flex items-center gap-1.5 text-[#C8D7E1]">
+            <MapPin className="w-3 h-3 text-[#CEB88E]" /> Flagship Showroom: Hà Nội &amp; TP. Hồ Chí Minh
+          </span>
+          <span className="mx-auto md:mx-0 font-medium">
+            MIỄN PHÍ GỬI HỘP MẪU VẢI &amp; DA Ý TẬN NHÀ TRÊN TOÀN QUỐC
+          </span>
+          <a
+            href="tel:0908888999"
+            className="hidden md:inline-flex items-center gap-1.5 text-[#C8D7E1] hover:text-[#F8F2EF] transition-colors"
           >
-            <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.69-7.86-12-14.46-6.19-9.46-11.1-20.2-14.73-32.21-3.63-12.02-5.45-23.47-5.45-34.34 0-14.74 3.69-26.69 11.07-35.85 7.38-9.16 16.5-13.84 27.36-14.04 4.8 0 10.18 1.25 16.14 3.75 5.96 2.5 9.74 3.78 11.35 3.84 1.4.07 5.37-1.25 11.91-3.96 6.54-2.71 12.09-3.98 16.65-3.81 12.63.63 22.7 5.09 30.22 13.37-10.86 6.54-16.18 15.65-15.96 27.33.22 9.14 3.75 16.78 10.6 22.92 6.85 6.14 14.88 9.61 24.08 10.42-2.18 6.74-4.8 13.3-7.86 19.68zM119.22 31.84c0-7.39 2.67-14.38 8.01-20.97 5.34-6.59 12-10.68 19.98-12.27.11 1.09.16 2.06.16 2.93 0 7.39-2.77 14.48-8.31 21.28-5.54 6.8-12.24 10.87-20.1 12.21-.11-.76-.17-1.82-.17-3.18z" />
-          </svg>
-        </a>
-
-        {/* Desktop Nav Items */}
-        <nav className="hidden md:flex items-center space-x-7 text-neutral-400">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className={`transition-colors hover:text-[#f5f5f7] ${
-                link.active ? "text-[#f5f5f7] font-medium" : ""
-              }`}
-            >
-              {link.name}
-            </a>
-          ))}
-        </nav>
-
-        {/* Action Icons */}
-        <div className="flex items-center space-x-5 text-neutral-300">
-          <button
-            aria-label="Tìm kiếm"
-            className="hover:text-[#f5f5f7] transition-colors cursor-pointer"
-          >
-            <Search className="w-3.5 h-3.5" />
-          </button>
-
-          <button
-            onClick={onOpenCart}
-            aria-label="Giỏ hàng"
-            className="relative hover:text-[#f5f5f7] transition-colors cursor-pointer flex items-center"
-          >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-2 bg-[#0071e3] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
-                {cartCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-neutral-300 hover:text-white"
-            aria-label="Menu"
-          >
-            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
+            <Phone className="w-3 h-3 text-[#CEB88E]" /> Hotline VIP: 0908.888.999
+          </a>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#151516] border-b border-white/[0.1] px-6 py-4 space-y-3">
-          {navLinks.map((link) => (
+      {/* Main Navigation Header - Fixed clean height on mobile without text clipping */}
+      <header
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-[#F8F2EF]/95 backdrop-blur-md shadow-sm border-b border-[#4C637C]/[0.08]"
+            : "bg-[#F8F2EF]/90 backdrop-blur-sm"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          {/* Brand Logo - Compact and vertically centered to prevent top clipping */}
+          <a href="#" className="flex flex-col group justify-center py-1">
+            <span className="font-serif text-base sm:text-lg md:text-2xl lg:text-3xl tracking-[0.08em] font-medium text-[#1E252D] group-hover:text-[#4C637C] transition-colors leading-tight">
+              ATELIER SOFA
+            </span>
+            <span className="text-[9px] tracking-[0.2em] sm:tracking-[0.35em] uppercase text-[#4C637C]/70 -mt-0.5">
+              MILANO • BẮC ÂU
+            </span>
+          </a>
+
+          {/* Desktop Nav Links */}
+          <nav className="hidden lg:flex items-center space-x-7 text-xs tracking-[0.14em] uppercase font-medium text-[#1E252D]/80">
             <a
-              key={link.name}
-              href={link.href}
-              className="block text-sm text-neutral-300 hover:text-white py-1"
-              onClick={() => setMobileMenuOpen(false)}
+              href="#customizer"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
             >
-              {link.name}
+              Bộ Sưu Tập
             </a>
-          ))}
+            <a
+              href="#craftsmanship"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+            >
+              Di Sản Chế Tác
+            </a>
+            <a
+              href="#collection-archive"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+            >
+              Tuyển Tập Độc Bản
+            </a>
+            <a
+              href="#certifications-reviews"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+            >
+              Chứng Nhận &amp; Đánh Giá
+            </a>
+            <a
+              href="#dimensions"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+            >
+              Kích Thước &amp; Phòng
+            </a>
+            <a
+              href="#lien-he"
+              className="hover:text-[#4C637C] transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#CEB88E] hover:after:w-full after:transition-all"
+            >
+              Đặt Chế Tác
+            </a>
+          </nav>
+
+          {/* Right Actions */}
+          <div className="flex items-center space-x-3.5 sm:space-x-4">
+            <button
+              onClick={onOpenConsult}
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#4C637C]/25 text-xs font-medium tracking-[0.1em] uppercase text-[#1E252D] hover:bg-[#4C637C] hover:text-[#F8F2EF] hover:border-[#4C637C] transition-all cursor-pointer"
+            >
+              <span>Tư Vấn Thiết Kế</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-[#CEB88E]" />
+            </button>
+
+            {/* Cart Trigger Button */}
+            <button
+              onClick={onOpenCart}
+              aria-label="Giỏ hàng chế tác"
+              className="relative p-2.5 rounded-full hover:bg-[#E1D7D2]/50 text-[#1E252D] transition-colors cursor-pointer group"
+            >
+              <ShoppingBag className="w-5 h-5 group-hover:scale-105 transition-transform text-[#1E252D]" />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[#CEB88E] text-[#1E252D] text-[10px] font-bold rounded-full flex items-center justify-center animate-in zoom-in-50 shadow-sm">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-full hover:bg-[#E1D7D2]/50 text-[#1E252D] transition-colors"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-40 bg-[#F8F2EF] pt-28 px-6 animate-in slide-in-from-top-4 duration-300">
+          <nav className="flex flex-col space-y-6 text-lg font-serif text-[#1E252D]">
+            <a
+              href="#customizer"
+              onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-[#4C637C]/10 pb-3 flex justify-between items-center"
+            >
+              <span>Bộ Sưu Tập Sofa</span>
+              <ArrowUpRight className="w-4 h-4 text-[#CEB88E]" />
+            </a>
+            <a
+              href="#craftsmanship"
+              onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-[#4C637C]/10 pb-3 flex justify-between items-center"
+            >
+              <span>Di Sản &amp; Tay Nghề Thủ Công</span>
+              <ArrowUpRight className="w-4 h-4 text-[#CEB88E]" />
+            </a>
+            <a
+              href="#collection-archive"
+              onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-[#4C637C]/10 pb-3 flex justify-between items-center"
+            >
+              <span>Tuyển Tập Độc Bản 2026</span>
+              <ArrowUpRight className="w-4 h-4 text-[#CEB88E]" />
+            </a>
+            <a
+              href="#certifications-reviews"
+              onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-[#4C637C]/10 pb-3 flex justify-between items-center"
+            >
+              <span>Chứng Nhận &amp; Đánh Giá</span>
+              <ArrowUpRight className="w-4 h-4 text-[#CEB88E]" />
+            </a>
+            <a
+              href="#dimensions"
+              onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-[#4C637C]/10 pb-3 flex justify-between items-center"
+            >
+              <span>Sơ Đồ Kích Thước &amp; Phòng</span>
+              <ArrowUpRight className="w-4 h-4 text-[#CEB88E]" />
+            </a>
+            <a
+              href="#lien-he"
+              onClick={() => setMobileMenuOpen(false)}
+              className="border-b border-[#4C637C]/10 pb-3 flex justify-between items-center"
+            >
+              <span>Đăng Ký Tư Vấn &amp; Đặt Chế Tác</span>
+              <ArrowUpRight className="w-4 h-4 text-[#CEB88E]" />
+            </a>
+          </nav>
+
+          <div className="mt-8 space-y-3">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenConsult();
+              }}
+              className="w-full py-3.5 rounded-full bg-[#4C637C] text-[#F8F2EF] font-medium text-sm tracking-[0.1em] uppercase hover:bg-[#3A4E63] transition-colors"
+            >
+              Đặt Lịch Tư Vấn Salon VIP
+            </button>
+            <a
+              href="tel:0908888999"
+              className="w-full py-3 rounded-full border border-[#4C637C]/20 text-[#1E252D] font-medium text-sm flex items-center justify-center gap-2 hover:bg-[#E1D7D2]/40"
+            >
+              <Phone className="w-4 h-4 text-[#CEB88E]" />
+              Hotline: 0908.888.999
+            </a>
+          </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
